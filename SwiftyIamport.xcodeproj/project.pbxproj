@@ -218,7 +218,6 @@
 				TargetAttributes = {
 					6FA7C9A21EA93D4D00BAA86C = {
 						CreatedOnToolsVersion = 8.3.2;
-						DevelopmentTeam = EG55T24G59;
 						ProvisioningStyle = Automatic;
 					};
 					6FA7C9B71EA93D9D00BAA86C = {
@@ -426,7 +425,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = EG55T24G59;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -445,7 +444,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = EG55T24G59;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -510,6 +509,7 @@
 				6FA7C9AD1EA93D4D00BAA86C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6FA7C9C71EA93D9D00BAA86C /* Build configuration list for PBXNativeTarget "SwiftyIamportDemo" */ = {
 			isa = XCConfigurationList;
@@ -518,6 +518,7 @@
 				6FA7C9C91EA93D9D00BAA86C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
