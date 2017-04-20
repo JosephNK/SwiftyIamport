@@ -9,7 +9,7 @@
 - https://github.com/iamport/iamport-nice-ios
 - https://github.com/iamport/iamport-inicis-ios
 
-아임포트에서 제공해주는 Objective-C Demo 소스를  Swift으로 구현 하였습니다.
+아임포트에서 제공해주는 Objective-C Demo 소스를 참고하여 Swift으로 구현 하였습니다.
 
 ## Installation
 
