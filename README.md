@@ -80,9 +80,9 @@ override func viewDidLoad() {
     super.viewDidLoad()
 
     // 결제 환경 설정
-    IAMPortPay.sharedInstance.configure(scheme: "iamporttest",			// info.plist에 설정한 scheme
-                                        webView: self.webView,		  // 현재 Controller에 있는 WebView 지정
-                                        m_redirect_url: nil)		    // m_redirect_url 주소
+    IAMPortPay.sharedInstance.configure(scheme: "iamporttest",  // info.plist에 설정한 scheme
+                                        webView: self.webView,  // 현재 Controller에 있는 WebView 지정
+                                        m_redirect_url: nil)    // m_redirect_url 주소
 
     // ISP 취소시 이벤트 (NicePay만 가능)
     IAMPortPay.sharedInstance.setCancelListenerForNicePay { [weak self] _ in
