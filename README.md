@@ -253,4 +253,4 @@ func webViewDidFinishLoad(_ webView: UIWebView) {
 
 ## Licence
 
-- SwiftyIamport licensed under [MIT](http://thi.mit-license.org/)
+- SwiftyIamport licensed under [MIT](https://raw.githubusercontent.com/JosephNK/SwiftyIamport/master/LICENSE)
