@@ -19,7 +19,7 @@ Cocoapods
 pod 'SwiftyIamport' ~> 1.0.0
 ```
 
-## Info.plist Setup
+## Setup (Info.plist)
 
 ### CFBundleURLTypes
 ```
