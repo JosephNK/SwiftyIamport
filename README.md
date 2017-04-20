@@ -74,7 +74,38 @@ pod 'SwiftyIamport' ~> 1.0.0
 </dict>
 ```
 
-## Usage (웹 요청하여 처리할 경우)
+## Usage
+
+1. 공통
+
+```
+import SwiftyIamport
+```
+
+```
+- AppDelegate 파일 설정
+
+func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+    if let scheme = url.scheme {
+        if scheme.hasPrefix(IAMPortPay.sharedInstance.appScheme ?? "") {
+            return IAMPortPay.sharedInstance.application(app, open: url, options: options)
+        }
+    }
+    return true
+}
+
+// for iOS below 9.0
+func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+    if let scheme = url.scheme {
+        if scheme.hasPrefix(IAMPortPay.sharedInstance.appScheme ?? "") {
+            return IAMPortPay.sharedInstance.application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
+        }
+    }
+    return true
+}
+```
+
+2. 웹 요청하여 처리할 경우
 ```
 override func viewDidLoad() {
     super.viewDidLoad()
@@ -127,7 +158,7 @@ func webViewDidFinishLoad(_ webView: UIWebView) {
 
 ```
 
-## Usage (모듈에 내장되어 있는 Html 파일을 이용하여 처리할 경우)
+3. 모듈에 내장되어 있는 HTML 파일을 이용하여 처리할 경우
 ```
 override func viewDidLoad() {
     super.viewDidLoad()
