@@ -4,11 +4,12 @@
 [![License: MIT](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://raw.githubusercontent.com/JosephNK/SwiftyIamport/master/LICENSE)
 [![Swift 3 compatible](https://img.shields.io/badge/swift3-compatible-4BC51D.svg?style=flat)](https://developer.apple.com/swift)
 
-스위프트 아임포트 모듈입니다. 
+스위프트용 아임포트 결제모듈을 쉽게 연동하기 위한 모듈입니다.
 
-https://github.com/iamport/iamport-nice-ios, https://github.com/iamport/iamport-inicis-ios
+- https://github.com/iamport/iamport-nice-ios
+- https://github.com/iamport/iamport-inicis-ios
 
-위 Objective-C로 된 소스를 바탕으로 Swift으로 구현 하였습니다.
+아임포트에서 제공해주는 Objective-C Demo 소스를 바탕으로 Swift으로 구현 하였습니다.
 
 ## Installation
 
