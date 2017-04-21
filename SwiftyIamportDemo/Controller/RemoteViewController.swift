@@ -25,9 +25,12 @@ class RemoteViewController: UIViewController {
         self.webView.frame = self.view.bounds
         
         // 결제 환경 설정
-        IAMPortPay.sharedInstance.configure(scheme: "iamporttest",
-                                            webView: self.webView,
-                                            m_redirect_url: nil)
+        let _ = IAMPortPay.sharedInstance.configure(scheme: "iamporttest")  // info.plist에 설정한 scheme
+        
+        IAMPortPay.sharedInstance
+            .setWebView(self.webView)   // 현재 Controller에 있는 WebView 지정
+            .setRedirectUrl(nil)        // m_redirect_url 주소
+            .commit()
         
         // ISP 취소시 이벤트 (NicePay만 가능)
         IAMPortPay.sharedInstance.setCancelListenerForNicePay { [weak self] _ in

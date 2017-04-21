@@ -71,25 +71,21 @@ public class IAMPortPay {
     
     public init() {}
     
-    public func configure(scheme: String?, webView: UIWebView?, m_redirect_url: String?) {
+    public func configure(scheme: String?) -> IAMPortPay {
         self.clear()
         
         self.appScheme = scheme
-        self.webView = webView
-        self.m_redirect_url = m_redirect_url
+        
+        return self
     }
     
-    public func configure(scheme: String?, storeIdentifier: String?, pgType: IAMPortPGType?, pgIdName: String?, payMethod: IAMPortPayMethod?, parameters: IAMPortParameters?, webView: UIWebView?, m_redirect_url: String?) {
+    public func configure(scheme: String?, storeIdentifier: String?) -> IAMPortPay {
         self.clear()
         
         self.appScheme = scheme
         self.storeIdentifier = storeIdentifier
-        self.pgType = pgType
-        self.pgIdName = pgIdName
-        self.payMethod = payMethod
-        self.webView = webView
-        self.parameters = parameters
-        self.m_redirect_url = m_redirect_url
+        
+        return self
     }
     
     public func clear() {
@@ -104,6 +100,46 @@ public class IAMPortPay {
         
         self.nicePayBankPayUrlString = nil
         self.addCancelHandler = nil
+    }
+    
+    public func setPGType(_ pgType: IAMPortPGType?) -> IAMPortPay {
+        self.pgType = pgType
+        
+        return self
+    }
+    
+    public func setIdName(_ pgIdName: String?) -> IAMPortPay {
+        self.pgIdName = pgIdName
+        
+        return self
+    }
+    
+    public func setPayMethod(_ payMethod: IAMPortPayMethod?) -> IAMPortPay {
+        self.payMethod = payMethod
+        
+        return self
+    }
+    
+    public func setParameters(_ parameters: IAMPortParameters?) -> IAMPortPay {
+        self.parameters = parameters
+        
+        return self
+    }
+    
+    public func setWebView(_ webView: UIWebView?) -> IAMPortPay {
+        self.webView = webView
+        
+        return self
+    }
+    
+    public func setRedirectUrl(_ m_redirect_url: String?) -> IAMPortPay {
+        self.m_redirect_url = m_redirect_url
+        
+        return self
+    }
+    
+    public func commit() {
+        
     }
     
     public func urlFromLocalHtmlFile() -> URL? {

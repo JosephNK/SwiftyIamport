@@ -24,6 +24,18 @@ class Html5InicisViewController: UIViewController {
         self.view.addSubview(webView)
         self.webView.frame = self.view.bounds
         
+        // 결제 환경 설정
+        let _ = IAMPortPay.sharedInstance.configure(scheme: "iamporttest",              // info.plist에 설정한 scheme
+                                                    storeIdentifier: "imp68124833")     // iamport 에서 부여받은 가맹점 식별코드
+        
+        IAMPortPay.sharedInstance
+            .setPGType(.html5_inicis)               // PG사 타입
+            .setIdName(nil)                         // 상점아이디 ({PG사명}.{상점아이디}으로 생성시 사용)
+            .setPayMethod(.card)                    // 결제 형식
+            .setWebView(self.webView)               // 현재 Controller에 있는 WebView 지정
+            .setRedirectUrl(nil)                    // m_redirect_url 주소
+            .commit()
+        
         // 결제 정보 데이타
         let parameters: IAMPortParameters = [
             "merchant_uid": String(format: "merchant_%@", String(Int(NSDate().timeIntervalSince1970 * 1000))),
@@ -37,16 +49,7 @@ class Html5InicisViewController: UIViewController {
             "custom_data": ["A1": 123, "B1": "Hello"]
             //"custom_data": "24"
         ]
-        
-        // 결제 환경 설정
-        IAMPortPay.sharedInstance.configure(scheme: "iamporttest",
-                                            storeIdentifier: "imp68124833",
-                                            pgType: .html5_inicis,
-                                            pgIdName: nil,
-                                            payMethod: .card,
-                                            parameters: parameters,
-                                            webView: self.webView,
-                                            m_redirect_url: nil)
+        IAMPortPay.sharedInstance.setParameters(parameters).commit()
         
         // 결제 웹페이지(Local) 파일 호출
         if let url = IAMPortPay.sharedInstance.urlFromLocalHtmlFile() {

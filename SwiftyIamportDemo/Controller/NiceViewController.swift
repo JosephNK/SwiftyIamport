@@ -23,6 +23,18 @@ class NiceViewController: UIViewController {
         self.view.addSubview(webView)
         self.webView.frame = self.view.bounds
         
+        // 결제 환경 설정
+        let _ = IAMPortPay.sharedInstance.configure(scheme: "iamporttest",              // info.plist에 설정한 scheme
+                                                    storeIdentifier: "imp84043725")     // iamport 에서 부여받은 가맹점 식별코드
+        
+        IAMPortPay.sharedInstance
+            .setPGType(.nice)               // PG사 타입
+            .setIdName(nil)                 // 상점아이디 ({PG사명}.{상점아이디}으로 생성시 사용)
+            .setPayMethod(.card)            // 결제 형식
+            .setWebView(self.webView)       // 현재 Controller에 있는 WebView 지정
+            .setRedirectUrl(nil)            // m_redirect_url 주소
+            .commit()
+        
         // 결제 정보 데이타
         let parameters: IAMPortParameters = [
             "merchant_uid": String(format: "merchant_%@", String(Int(NSDate().timeIntervalSince1970 * 1000))),
@@ -36,16 +48,7 @@ class NiceViewController: UIViewController {
             "custom_data": ["A1": 123, "B1": "Hello"]
             //"custom_data": "24"
         ]
-        
-        // 결제 환경 설정
-        IAMPortPay.sharedInstance.configure(scheme: "iamporttest",
-                                            storeIdentifier: "imp84043725",
-                                            pgType: .nice,
-                                            pgIdName: nil,
-                                            payMethod: .card,
-                                            parameters: parameters,
-                                            webView: self.webView,
-                                            m_redirect_url: nil)
+        IAMPortPay.sharedInstance.setParameters(parameters).commit()
         
         // ISP 취소시 이벤트 (NicePay만 가능)
         IAMPortPay.sharedInstance.setCancelListenerForNicePay { [weak self] _ in
