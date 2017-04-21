@@ -42,6 +42,7 @@ class NiceViewController: UIViewController {
                                             storeIdentifier: "imp84043725",
                                             pgType: .nice,
                                             pgIdName: nil,
+                                            payMethod: .card,
                                             parameters: parameters,
                                             webView: self.webView,
                                             m_redirect_url: nil)

@@ -56,6 +56,7 @@ public class IAMPortPay {
     public static let sharedInstance = IAMPortPay()
     
     fileprivate(set) var pgType: IAMPortPGType?
+    fileprivate(set) var payMethod: IAMPortPayMethod?
     fileprivate(set) var m_redirect_url: String? = nil
     
     fileprivate(set) weak var webView: UIWebView?
@@ -78,13 +79,14 @@ public class IAMPortPay {
         self.m_redirect_url = m_redirect_url
     }
     
-    public func configure(scheme: String?, storeIdentifier: String?, pgType: IAMPortPGType?, pgIdName: String?, parameters: IAMPortParameters?, webView: UIWebView?, m_redirect_url: String?) {
+    public func configure(scheme: String?, storeIdentifier: String?, pgType: IAMPortPGType?, pgIdName: String?, payMethod: IAMPortPayMethod?, parameters: IAMPortParameters?, webView: UIWebView?, m_redirect_url: String?) {
         self.clear()
         
         self.appScheme = scheme
         self.storeIdentifier = storeIdentifier
         self.pgType = pgType
         self.pgIdName = pgIdName
+        self.payMethod = payMethod
         self.webView = webView
         self.parameters = parameters
         self.m_redirect_url = m_redirect_url
@@ -95,6 +97,7 @@ public class IAMPortPay {
         self.storeIdentifier = nil
         self.pgType = nil
         self.pgIdName = nil
+        self.payMethod = nil
         self.webView = nil
         self.parameters = nil
         self.m_redirect_url = nil
@@ -212,24 +215,19 @@ public extension IAMPortPay {
                         param["pg"] = pgType.rawValue + "." + pgIdName
                     }
                     
+                    guard let payMethod = self.payMethod else {
+                        completion(IAMPortPayError.payMethodType)
+                        return
+                    }
+                    param["pay_method"] = payMethod.rawValue
+                    
                     guard let parameters = self.parameters else {
                         completion(IAMPortPayError.parametersNone)
                         return
                     }
                     
                     for (key, value) in parameters {
-                        switch key {
-                        case "pay_method":
-                            guard let v = value as? IAMPortPayMethod else {
-                                completion(IAMPortPayError.payMethodType)
-                                return
-                            }
-                            param[key] = v.rawValue
-                            break
-                        default:
-                            param[key] = value
-                            break
-                        }
+                        param[key] = value
                     }
                     
                     if self.isNotSupportValidation(pgType, parameters) {

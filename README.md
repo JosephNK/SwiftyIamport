@@ -182,6 +182,7 @@ override func viewDidLoad() {
                                         storeIdentifier: "imp84043725",     // iamport 에서 부여받은 가맹점 식별코드
                                         pgType: .nice,                      // PG사 타입
                                         pgIdName: nil,                      // 상점아이디 ({PG사명}.{상점아이디}으로 생성시 사용)
+                                        payMethod: .card,                   // 결제 형식
                                         parameters: parameters,             // 결제 정보 데이타
                                         webView: self.webView,              // 현재 Controller에 있는 WebView 지정
                                         m_redirect_url: nil)                // m_redirect_url 주소

@@ -43,6 +43,7 @@ class Html5InicisViewController: UIViewController {
                                             storeIdentifier: "imp68124833",
                                             pgType: .html5_inicis,
                                             pgIdName: nil,
+                                            payMethod: .card,
                                             parameters: parameters,
                                             webView: self.webView,
                                             m_redirect_url: nil)
