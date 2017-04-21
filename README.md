@@ -16,7 +16,7 @@
 Cocoapods
 
 ```
-pod 'SwiftyIamport' ~> 1.2.0
+pod 'SwiftyIamport'
 ```
 
 ## Setup (Info.plist)
