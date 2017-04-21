@@ -185,7 +185,7 @@ public extension IAMPortPay {
     public func webViewRedirectUrl(shouldStartLoadWith request: URLRequest, parser: @escaping (_ data: Data?, _ response: URLResponse?, _ error: Error?) -> Any?, completion: @escaping (_ pasingData: Any?) -> Void) {
         let urlString = request.url?.absoluteString ?? ""
         if let redirect_url = self.m_redirect_url {
-            if urlString.lowercased().hasPrefix(redirect_url) {
+            if urlString.hasPrefix(redirect_url) {
                 let task = URLSession.shared.dataTask(with: request.url!) { data, response, error in
                     let pasingData = parser(data, response, error)
                     DispatchQueue.main.async {
