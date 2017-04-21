@@ -217,13 +217,6 @@ public extension IAMPortPay {
             return false
         }
         
-        // m_redirect_url 체크
-        if let redirect_url = self.m_redirect_url {
-            if urlString.lowercased().hasPrefix(redirect_url) {
-                return false
-            }
-        }
-        
         return self.webViewShouldStartLoadWithForNicePay(request: request)
     }
     
