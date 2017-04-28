@@ -71,6 +71,7 @@ public class IAMPortPay {
     
     public init() {}
     
+    @discardableResult
     public func configure(scheme: String?) -> IAMPortPay {
         self.clear()
         
@@ -79,6 +80,7 @@ public class IAMPortPay {
         return self
     }
     
+    @discardableResult
     public func configure(scheme: String?, storeIdentifier: String?) -> IAMPortPay {
         self.clear()
         
@@ -102,36 +104,42 @@ public class IAMPortPay {
         self.addCancelHandler = nil
     }
     
+    @discardableResult
     public func setPGType(_ pgType: IAMPortPGType?) -> IAMPortPay {
         self.pgType = pgType
         
         return self
     }
     
+    @discardableResult
     public func setIdName(_ pgIdName: String?) -> IAMPortPay {
         self.pgIdName = pgIdName
         
         return self
     }
     
+    @discardableResult
     public func setPayMethod(_ payMethod: IAMPortPayMethod?) -> IAMPortPay {
         self.payMethod = payMethod
         
         return self
     }
     
+    @discardableResult
     public func setParameters(_ parameters: IAMPortParameters?) -> IAMPortPay {
         self.parameters = parameters
         
         return self
     }
     
+    @discardableResult
     public func setWebView(_ webView: UIWebView?) -> IAMPortPay {
         self.webView = webView
         
         return self
     }
     
+    @discardableResult
     public func setRedirectUrl(_ m_redirect_url: String?) -> IAMPortPay {
         self.m_redirect_url = m_redirect_url
         

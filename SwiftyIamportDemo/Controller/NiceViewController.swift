@@ -24,8 +24,8 @@ class NiceViewController: UIViewController {
         self.webView.frame = self.view.bounds
         
         // 결제 환경 설정
-        let _ = IAMPortPay.sharedInstance.configure(scheme: "iamporttest",              // info.plist에 설정한 scheme
-                                                    storeIdentifier: "imp84043725")     // iamport 에서 부여받은 가맹점 식별코드
+        IAMPortPay.sharedInstance.configure(scheme: "iamporttest",              // info.plist에 설정한 scheme
+                                            storeIdentifier: "imp84043725")     // iamport 에서 부여받은 가맹점 식별코드
         
         IAMPortPay.sharedInstance
             .setPGType(.nice)               // PG사 타입
@@ -33,7 +33,6 @@ class NiceViewController: UIViewController {
             .setPayMethod(.card)            // 결제 형식
             .setWebView(self.webView)       // 현재 Controller에 있는 WebView 지정
             .setRedirectUrl(nil)            // m_redirect_url 주소
-            .commit()
         
         // 결제 정보 데이타
         let parameters: IAMPortParameters = [
