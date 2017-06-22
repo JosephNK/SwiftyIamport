@@ -93,7 +93,6 @@ extension NiceViewController: UIWebViewDelegate {
             // Main Thread 처리
         }
         
-        //
         return IAMPortPay.sharedInstance.webView(webView, shouldStartLoadWith: request, navigationType: navigationType)
     }
     
