@@ -1,4 +1,4 @@
-# SwiftyIamport For iOS
+# SwiftyIamport For iOS (Swift 3)
 
 [![Platform iOS](https://img.shields.io/badge/platform-iOS-blue.svg?style=flat)]()
 [![License: MIT](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://raw.githubusercontent.com/JosephNK/SwiftyIamport/master/LICENSE)
@@ -16,7 +16,7 @@
 Cocoapods
 
 ```
-pod 'SwiftyIamport'
+pod 'SwiftyIamport', '~> 3.0.0'
 ```
 
 ## Setup (Info.plist)
