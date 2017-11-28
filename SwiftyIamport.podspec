@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   s.version      = "1.2.3"
   s.summary      = "I'mport in Swift"
 
-  s.description  = "Swift I'mport for iOS"
+  s.description  = "Swift I'mport for iOS (Swift 4)"
 
   s.homepage     = "https://github.com/JosephNK/SwiftyIamport"
   s.license      = "MIT"
