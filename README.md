@@ -1,4 +1,4 @@
-# SwiftyIamport For iOS (Swift 4)
+# SwiftyIamport For iOS
 
 [![Platform iOS](https://img.shields.io/badge/platform-iOS-blue.svg?style=flat)]()
 [![License: MIT](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://raw.githubusercontent.com/JosephNK/SwiftyIamport/master/LICENSE)
@@ -16,15 +16,7 @@
 Cocoapods
 
 ```
-Swift 4
-
 pod 'SwiftyIamport', '~> 4.0.0'
-```
-
-```
-Swift 3
-
-pod 'SwiftyIamport', '~> 3.0.0'
 ```
 
 ## Setup (Info.plist)
@@ -261,7 +253,8 @@ func webViewDidFinishLoad(_ webView: UIWebView) {
 
 ## Requirements
 
-- Swift 3
+- Swift 4 [branch link](https://github.com/JosephNK/SwiftyIamport) 
+- Swift 3 [branch link](https://github.com/JosephNK/SwiftyIamport/tree/swift3)
 - iOS 8.0+
 
 ## Licence
