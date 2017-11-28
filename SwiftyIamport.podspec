@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|  
   s.name         = "SwiftyIamport"
-  s.version      = "1.2.3"
+  s.version      = "3.0.0"
   s.summary      = "I'mport in Swift"
 
   s.description  = "Swift I'mport for iOS (Swift 3)"
