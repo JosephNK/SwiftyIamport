@@ -381,7 +381,7 @@ public extension IAMPortPay {
                 // 계좌이체인 경우  scheme + ? 로 리던 되어 "?" 도 함께 삭제 함.
                 // iamporttest://?bankpaycode=xxxx ...." 에서 "bankpaycode=xxxx ...." 추출하기 위함
                 let appSchemeAddtion = "\(_appScheme)?"
-                redirectURL = redirectURL.substring(from: appSchemeAddtion.endIndex)
+                redirectURL = String(redirectURL[appSchemeAddtion.endIndex...])
                 #if DEBUG
                     print("### bankpay redirectURL: \(redirectURL)")
                 #endif
@@ -409,7 +409,7 @@ public extension IAMPortPay {
                 // iamporttest://://http://web.nicepay.co.kr/smart/card/isp/ .... ispResult.jsp 에서
                 // http://web.nicepay.co.kr/smart/card/isp/.... ispResult.jsp" 추출하기 위함
                 let appSchemeAddtion = "\(_appScheme)://"
-                redirectURL = redirectURL.substring(from: appSchemeAddtion.endIndex)
+                redirectURL = String(redirectURL[appSchemeAddtion.endIndex...])
                 #if DEBUG
                     print("### isp redirectURL: \(redirectURL)")
                 #endif
@@ -433,7 +433,7 @@ public extension IAMPortPay {
                 let isNiceSite = urlString.range(of: "nicepay.co.kr")
                 let range = urlString.range(of: "callbackparam1=")
                 if range != nil && isNiceSite != nil {
-                    let _urlString = urlString.substring(from: urlString.index(range!.lowerBound, offsetBy: "callbackparam1=".count))
+                    let _urlString = String(urlString[urlString.index(range!.lowerBound, offsetBy: "callbackparam1=".count)...])
                     
                     do {
                         let regex = try NSRegularExpression(pattern: "&(?!\\?)", options: .caseInsensitive)
