@@ -1,8 +1,8 @@
-# SwiftyIamport For iOS
+# SwiftyIamport For iOS (Swift 4)
 
 [![Platform iOS](https://img.shields.io/badge/platform-iOS-blue.svg?style=flat)]()
 [![License: MIT](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://raw.githubusercontent.com/JosephNK/SwiftyIamport/master/LICENSE)
-[![Swift 3 compatible](https://img.shields.io/badge/swift3-compatible-4BC51D.svg?style=flat)](https://developer.apple.com/swift)
+[![Swift 4 compatible](https://img.shields.io/badge/swift4-compatible-4BC51D.svg?style=flat)](https://developer.apple.com/swift)
 
 스위프트용 아임포트 결제모듈을 쉽게 연동하기 위한 모듈입니다.
 
@@ -16,7 +16,15 @@
 Cocoapods
 
 ```
-pod 'SwiftyIamport'
+Swift 4
+
+pod 'SwiftyIamport', '~> 4.0.0'
+```
+
+```
+Swift 3
+
+pod 'SwiftyIamport', '~> 3.0.0'
 ```
 
 ## Setup (Info.plist)
