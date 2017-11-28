@@ -433,13 +433,13 @@ public extension IAMPortPay {
                 let isNiceSite = urlString.range(of: "nicepay.co.kr")
                 let range = urlString.range(of: "callbackparam1=")
                 if range != nil && isNiceSite != nil {
-                    let _urlString = urlString.substring(from: urlString.index(range!.lowerBound, offsetBy: "callbackparam1=".characters.count))
+                    let _urlString = urlString.substring(from: urlString.index(range!.lowerBound, offsetBy: "callbackparam1=".count))
                     
                     do {
                         let regex = try NSRegularExpression(pattern: "&(?!\\?)", options: .caseInsensitive)
                         let rangeOfFirstMatch = regex.rangeOfFirstMatch(in: _urlString,
                                                                         options: [],
-                                                                        range: NSRange(location: 0, length: _urlString.characters.count))
+                                                                        range: NSRange(location: 0, length: _urlString.count))
                         let bankPayUrlString = regex.stringByReplacingMatches(in: _urlString,
                                                                               options: [],
                                                                               range: rangeOfFirstMatch,
