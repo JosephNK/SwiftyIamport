@@ -9,7 +9,7 @@
 import UIKit
 
 enum ListRowType: Int {
-    case remote         = 0
+    case remote             = 0
     case nice
     case html5_inicis
 }
@@ -30,7 +30,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
     func numberOfSections(in tableView: UITableView) -> Int  {
-        return 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -38,22 +38,24 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let section = indexPath.section
+        
         guard let rowType = ListRowType(rawValue: indexPath.row)  else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as UITableViewCell
             return cell
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: listCellIdentifier, for: indexPath)
-        
+
         switch rowType {
         case .remote:
-            cell.textLabel?.text = "Iamport Demo"
+            cell.textLabel?.text = (section == 0) ? "Iamport UIWebView Demo" : "Iamport WKWebView Demo"
             break
         case .nice:
-            cell.textLabel?.text = "NicePay Demo"
+            cell.textLabel?.text = (section == 0) ? "NicePay UIWebView Demo" : "NicePay WKWebView Demo"
             break
         case .html5_inicis:
-            cell.textLabel?.text = "Html5 Inicis Demo"
+            cell.textLabel?.text = (section == 0) ? "Html5 Inicis UIWebView Demo" : "Html5 Inicis WKWebView Demo"
             break
         }
         
@@ -64,6 +66,8 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.deselectRow(at: indexPath, animated: true)
         
         DispatchQueue.main.async {
+            let section = indexPath.section
+            
             guard let rowType = ListRowType(rawValue: indexPath.row)  else {
                 return
             }
@@ -72,18 +76,22 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             switch rowType {
             case .remote:
-                controller = RemoteViewController()
+                controller = (section == 0) ? RemoteViewController() : WKRemoteViewController()
                 break
             case .nice:
-                controller = NiceViewController()
+                controller = (section == 0) ? NiceViewController() : WKNiceViewController()
                 break
             case .html5_inicis:
-                controller = Html5InicisViewController()
+                controller = (section == 0) ? Html5InicisViewController() : WKHtml5InicisViewController()
                 break
             }
             
             self.navigationController?.pushViewController(controller, animated: true)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return (section == 0) ? "UIWebView" : "WKWebView"
     }
 }
 

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import WebKit
 
 public typealias IAMPortParameters = [String: Any]
 
@@ -50,6 +51,8 @@ public enum IAMPortPayError: Error {
     public static let notSupportType = IAMPortPayError.custom(reason: "해당 결제방식은 PG사에서 제공하지 않습니다.")
     public static let jsonType = IAMPortPayError.custom(reason: "JSON 형식이 잘못되었습니다.")
     public static let parametersNone = IAMPortPayError.custom(reason: "파라미터가 없습니다.")
+    public static let domLoadType = IAMPortPayError.custom(reason: "DOM Load 중 오류가 발생하였습니다.")
+    public static let runJavascriptType = IAMPortPayError.custom(reason: "JavaScript 실행 중 오류가 발생하였습니다.")
 }
 
 public class IAMPortPay {
@@ -60,6 +63,7 @@ public class IAMPortPay {
     fileprivate(set) var m_redirect_url: String? = nil
     
     fileprivate(set) weak var webView: UIWebView?
+    fileprivate(set) weak var wkWebView: WKWebView?
     
     fileprivate(set) public var appScheme: String? = nil
     fileprivate(set) public var storeIdentifier: String? = nil
@@ -140,6 +144,13 @@ public class IAMPortPay {
     }
     
     @discardableResult
+    public func setWKWebView(_ webView: WKWebView?) -> IAMPortPay {
+        self.wkWebView = webView
+        
+        return self
+    }
+    
+    @discardableResult
     public func setRedirectUrl(_ m_redirect_url: String?) -> IAMPortPay {
         self.m_redirect_url = m_redirect_url
         
@@ -190,7 +201,17 @@ public extension IAMPortPay {
 
 // MARK: - WebView Delegate Helper
 public extension IAMPortPay {
+    @available(*, deprecated, message: "Use: requestRedirectUrl method")
     public func webViewRedirectUrl(shouldStartLoadWith request: URLRequest, parser: @escaping (_ data: Data?, _ response: URLResponse?, _ error: Error?) -> Any?, completion: @escaping (_ pasingData: Any?) -> Void) {
+        self.requestRedirectUrl(for: request, parser: parser, completion: completion)
+    }
+    
+    @available(*, deprecated, message: "Use: requestAction method")
+    public func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        return self.requestAction(for: request)
+    }
+    
+    public func requestRedirectUrl(for request: URLRequest, parser: @escaping (_ data: Data?, _ response: URLResponse?, _ error: Error?) -> Any?, completion: @escaping (_ pasingData: Any?) -> Void) {
         let urlString = request.url?.absoluteString ?? ""
         if let redirect_url = self.m_redirect_url {
             if urlString.hasPrefix(redirect_url) {
@@ -205,101 +226,181 @@ public extension IAMPortPay {
         }
     }
     
-    public func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-        let url = request.url
-        let urlString = url?.absoluteString ?? ""
+    public func requestAction(for request: URLRequest) -> Bool {
+        guard let url = request.url else {
+            return false
+        }
+        
+        let urlString = url.absoluteString
         
         #if DEBUG
-            print("### shouldStartLoadWith request url: \(urlString)")
+        print("### requestAction request url: \(urlString)")
         #endif
         
         // app store URL 여부 확인
         let bAppStoreURL1 = urlString.range(of: "phobos.apple.com", options: String.CompareOptions.caseInsensitive)
         let bAppStoreURL2 = urlString.range(of: "itunes.apple.com", options: String.CompareOptions.caseInsensitive)
         if (bAppStoreURL1 != nil) || (bAppStoreURL2 != nil) {
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(url!, options: [:], completionHandler: nil)
-            } else {
-                UIApplication.shared.openURL(url!)
+            if UIApplication.shared.canOpenURL(url) {
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                } else {
+                    UIApplication.shared.openURL(url)
+                }
+                return false
             }
-            return false
         }
         
-        return self.webViewShouldStartLoadWithForNicePay(request: request)
+        if !url.absoluteString.hasPrefix("http://") && !url.absoluteString.hasPrefix("https://") {
+            if UIApplication.shared.canOpenURL(url) {
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                } else {
+                    UIApplication.shared.openURL(url)
+                }
+                return false
+            }
+        }
+        
+        return self.webViewRequestWithForNicePay(request: request)
     }
     
-    func requestIAMPortPayWebViewDidFinishLoad(_ webView: UIWebView, completion: @escaping (_ error: IAMPortPayError?) -> Void) {
+    public func requestIAMPortPayWebViewDidFinishLoad(_ webView: UIWebView, completion: @escaping (_ error: IAMPortPayError?) -> Void) {
         if webView.stringByEvaluatingJavaScript(from: "document.readyState") == "complete" {
+            let url = webView.request?.url
+            
             #if DEBUG
-                print("### dom ready!!")
+            print("### dom ready!! \(String(describing: url?.absoluteString ?? ""))")
             #endif
-            if let currentURL = webView.request?.url?.absoluteString {
-                #if DEBUG
-                    print("### webViewDidFinishLoad WebView currentURL: \(currentURL)")
-                #endif
+            
+            let c = url?.absoluteString.contains("IAMPortPay.html") ?? false
+            if c == false { return }
+            
+            let result = self.makeParameters(for: url)
+            
+            if let error = result.error {
+                return completion(error)
+            }
+            
+            if let param = result.param {
+                do {
+                    let jsonData = try JSONSerialization.data(withJSONObject: param, options: .prettyPrinted)
+                    let jsonString = NSString(data: jsonData, encoding: String.Encoding.utf8.rawValue)! as String
+                    webView.stringByEvaluatingJavaScript(from: String(format: "requestIAMPortPay(%@)", jsonString))
+                } catch {
+                    completion(IAMPortPayError.jsonType)
+                    return
+                }
                 
-                if currentURL.lowercased().hasPrefix("file://") {
-                    var param: IAMPortParameters = [:]
-                    
-                    guard let pgType = self.pgType else {
-                        completion(IAMPortPayError.pgType)
-                        return
+                completion(nil)
+            }
+        }
+    }
+    
+    public func requestIAMPortPayWKWebViewDidFinishLoad(_ wkWebView: WKWebView, completion: @escaping (_ error: IAMPortPayError?) -> Void) {
+        wkWebView.evaluateJavaScript("document.readyState == \"complete\"") { (any, error) in
+            let url = wkWebView.url
+            
+            #if DEBUG
+            print("### dom ready!! \(String(describing: url?.absoluteString ?? ""))")
+            #endif
+            
+            let c = url?.absoluteString.contains("IAMPortPay.html") ?? false
+            if c == false { return }
+            
+            if error != nil {
+                return completion(IAMPortPayError.domLoadType)
+            }
+            
+            let result = self.makeParameters(for: url)
+            
+            if let error = result.error {
+                return completion(error)
+            }
+            
+            if let param = result.param {
+                do {
+                    let jsonData = try JSONSerialization.data(withJSONObject: param, options: .prettyPrinted)
+                    let jsonString = NSString(data: jsonData, encoding: String.Encoding.utf8.rawValue)! as String
+                    wkWebView.evaluateJavaScript(String(format: "requestIAMPortPay(%@)", jsonString)) { (any, error) in
+                        if error != nil {
+                            completion(IAMPortPayError.runJavascriptType)
+                            return
+                        }
+                        
+                        completion(nil)
                     }
-                    let pgIdName = self.pgIdName ?? ""
-                    if pgIdName.isEmpty {
-                        param["pg"] = pgType.rawValue
-                    }else {
-                        param["pg"] = pgType.rawValue + "." + pgIdName
-                    }
-                    
-                    guard let payMethod = self.payMethod else {
-                        completion(IAMPortPayError.payMethodType)
-                        return
-                    }
-                    param["pay_method"] = payMethod.rawValue
-                    
-                    guard let parameters = self.parameters else {
-                        completion(IAMPortPayError.parametersNone)
-                        return
-                    }
-                    
-                    for (key, value) in parameters {
-                        param[key] = value
-                    }
-                    
-                    if self.isNotSupportValidation(pgType, parameters) {
-                        completion(IAMPortPayError.notSupportType)
-                        return
-                    }
-                    
-                    let appScheme = self.appScheme ?? ""
-                    if !appScheme.isEmpty {
-                        param["app_scheme"] = appScheme
-                    }
-                    
-                    let m_redirect_url = self.m_redirect_url ?? ""
-                    if !m_redirect_url.isEmpty {
-                        param["m_redirect_url"] = m_redirect_url
-                    }
-                    
-                    #if DEBUG
-                        print("param: \(param)")
-                    #endif
-                    
-                    // Javascirpt의 함수 실행하기
-                    do {
-                        let jsonData = try JSONSerialization.data(withJSONObject: param, options: .prettyPrinted)
-                        let jsonString = NSString(data: jsonData, encoding: String.Encoding.utf8.rawValue)! as String
-                        webView.stringByEvaluatingJavaScript(from: String(format: "requestIAMPortPay(%@)", jsonString))
-                    }catch {
-                        completion(IAMPortPayError.jsonType)
-                        return
-                    }
-                    
-                    completion(nil)
+                } catch {
+                    completion(IAMPortPayError.jsonType)
+                    return
                 }
             }
         }
+    }
+    
+    public func setCancelListenerForNicePay(_ handler: (() -> Void)?) {
+        self.addCancelHandler = handler
+    }
+    
+}
+
+fileprivate extension IAMPortPay {
+    
+    fileprivate func makeParameters(for url: URL?) -> (param: IAMPortParameters?, error: IAMPortPayError?) {
+        if let currentURL = url?.absoluteString {
+            #if DEBUG
+            print("### WebView currentURL: \(currentURL)")
+            #endif
+            
+            if currentURL.lowercased().hasPrefix("file://") {
+                var param: IAMPortParameters = [:]
+                
+                guard let pgType = self.pgType else {
+                    return (nil, IAMPortPayError.pgType)
+                }
+                let pgIdName = self.pgIdName ?? ""
+                if pgIdName.isEmpty {
+                    param["pg"] = pgType.rawValue
+                }else {
+                    param["pg"] = pgType.rawValue + "." + pgIdName
+                }
+                
+                guard let payMethod = self.payMethod else {
+                    return (nil, IAMPortPayError.payMethodType)
+                }
+                param["pay_method"] = payMethod.rawValue
+                
+                guard let parameters = self.parameters else {
+                    return (nil, IAMPortPayError.parametersNone)
+                }
+                
+                for (key, value) in parameters {
+                    param[key] = value
+                }
+                
+                if self.isNotSupportValidation(pgType, parameters) {
+                    return (nil, IAMPortPayError.notSupportType)
+                }
+                
+                let appScheme = self.appScheme ?? ""
+                if !appScheme.isEmpty {
+                    param["app_scheme"] = appScheme
+                }
+                
+                let m_redirect_url = self.m_redirect_url ?? ""
+                if !m_redirect_url.isEmpty {
+                    param["m_redirect_url"] = m_redirect_url
+                }
+                
+                #if DEBUG
+                print("param: \(param)")
+                #endif
+                
+                return (param, nil)
+            }
+        }
+        
+        return (nil, IAMPortPayError.parametersNone)
     }
     
     fileprivate func isNotSupportValidation(_ pgType: IAMPortPGType?, _ parameters: IAMPortParameters) -> Bool {
@@ -360,15 +461,12 @@ public extension IAMPortPay {
         
         return false
     }
-}
-
-// MARK: - NicePay Helper
-public extension IAMPortPay {
+    
     fileprivate func applicationOpenUrlForNicePay(url: URL) -> Bool {
         var redirectURL = url.absoluteString
         
         #if DEBUG
-            print("### redirectURL: \(String(describing: redirectURL.removingPercentEncoding!))")
+        print("### redirectURL: \(String(describing: redirectURL.removingPercentEncoding!))")
         #endif
         
         let _appScheme = self.appScheme ?? ""
@@ -383,7 +481,7 @@ public extension IAMPortPay {
                 let appSchemeAddtion = "\(_appScheme)?"
                 redirectURL = String(redirectURL[appSchemeAddtion.endIndex...])
                 #if DEBUG
-                    print("### bankpay redirectURL: \(redirectURL)")
+                print("### bankpay redirectURL: \(redirectURL)")
                 #endif
                 
                 self.requestBankPayResultForNicePay(self.webView, urlString: self.nicePayBankPayUrlString, bodyString: redirectURL)
@@ -411,7 +509,7 @@ public extension IAMPortPay {
                 let appSchemeAddtion = "\(_appScheme)://"
                 redirectURL = String(redirectURL[appSchemeAddtion.endIndex...])
                 #if DEBUG
-                    print("### isp redirectURL: \(redirectURL)")
+                print("### isp redirectURL: \(redirectURL)")
                 #endif
                 
                 self.requestISPPayResultForNicePay(self.webView, urlString: redirectURL)
@@ -423,7 +521,7 @@ public extension IAMPortPay {
         return true
     }
     
-    func webViewShouldStartLoadWithForNicePay(request: URLRequest) -> Bool {
+    fileprivate func webViewRequestWithForNicePay(request: URLRequest) -> Bool {
         let url = request.url
         let urlString = url?.absoluteString ?? ""
         
@@ -446,7 +544,7 @@ public extension IAMPortPay {
                                                                               withTemplate: "?")
                         self.nicePayBankPayUrlString = bankPayUrlString.removingPercentEncoding
                         #if DEBUG
-                            print("nicePayBankPayUrlString: \(String(describing: self.nicePayBankPayUrlString!))")
+                        print("nicePayBankPayUrlString: \(String(describing: self.nicePayBankPayUrlString!))")
                         #endif
                     } catch {
                         
@@ -467,17 +565,13 @@ public extension IAMPortPay {
         return true
     }
     
-    public func setCancelListenerForNicePay(_ handler: (() -> Void)?) {
-        self.addCancelHandler = handler
-    }
-    
     fileprivate func requestBankPayResultForNicePay(_ webView: UIWebView?, urlString: String?, bodyString: String?) {
         guard let webView = webView, let urlString = urlString, let bodyString = bodyString else {
             return
         }
         
         #if DEBUG
-            print("### requestBankPayResultForNicePay call !!!")
+        print("### requestBankPayResultForNicePay call !!!")
         #endif
         
         if let url = URL(string: urlString) {
@@ -494,7 +588,7 @@ public extension IAMPortPay {
         }
         
         #if DEBUG
-            print("### requestISPPayResultForNicePay call !!!")
+        print("### requestISPPayResultForNicePay call !!!")
         #endif
         
         if let url = URL(string: urlString) {
@@ -503,4 +597,5 @@ public extension IAMPortPay {
             webView.loadRequest(request)
         }
     }
+    
 }

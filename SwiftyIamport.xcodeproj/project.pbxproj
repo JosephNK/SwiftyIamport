@@ -21,6 +21,9 @@
 		6FA7C9D41EA93DD200BAA86C /* memo in Resources */ = {isa = PBXBuildFile; fileRef = 6FA7C9CF1EA93DD200BAA86C /* memo */; };
 		6FA7C9D51EA93E6900BAA86C /* SwiftyIamport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FA7C9A31EA93D4D00BAA86C /* SwiftyIamport.framework */; };
 		6FA7C9D61EA93E6900BAA86C /* SwiftyIamport.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6FA7C9A31EA93D4D00BAA86C /* SwiftyIamport.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6FA8C6DD21A7D0FC00757E96 /* WKNiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FA8C6DC21A7D0FC00757E96 /* WKNiceViewController.swift */; };
+		6FF9815321AF73B10044F23F /* WKHtml5InicisViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF9815221AF73B10044F23F /* WKHtml5InicisViewController.swift */; };
+		6FF9815521AF73BE0044F23F /* WKRemoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF9815421AF73BE0044F23F /* WKRemoteViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +67,9 @@
 		6FA7C9CD1EA93DD200BAA86C /* RemoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteViewController.swift; sourceTree = "<group>"; };
 		6FA7C9CE1EA93DD200BAA86C /* ListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		6FA7C9CF1EA93DD200BAA86C /* memo */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = memo; sourceTree = "<group>"; };
+		6FA8C6DC21A7D0FC00757E96 /* WKNiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKNiceViewController.swift; sourceTree = "<group>"; };
+		6FF9815221AF73B10044F23F /* WKHtml5InicisViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKHtml5InicisViewController.swift; sourceTree = "<group>"; };
+		6FF9815421AF73BE0044F23F /* WKRemoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKRemoteViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +157,9 @@
 				6FA7C9CB1EA93DD200BAA86C /* Html5InicisViewController.swift */,
 				6FA7C9CC1EA93DD200BAA86C /* NiceViewController.swift */,
 				6FA7C9CD1EA93DD200BAA86C /* RemoteViewController.swift */,
+				6FF9815221AF73B10044F23F /* WKHtml5InicisViewController.swift */,
+				6FA8C6DC21A7D0FC00757E96 /* WKNiceViewController.swift */,
+				6FF9815421AF73BE0044F23F /* WKRemoteViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -283,8 +292,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				6FA7C9D21EA93DD200BAA86C /* RemoteViewController.swift in Sources */,
+				6FA8C6DD21A7D0FC00757E96 /* WKNiceViewController.swift in Sources */,
 				6FA7C9D31EA93DD200BAA86C /* ListViewController.swift in Sources */,
 				6FA7C9D11EA93DD200BAA86C /* NiceViewController.swift in Sources */,
+				6FF9815521AF73BE0044F23F /* WKRemoteViewController.swift in Sources */,
+				6FF9815321AF73B10044F23F /* WKHtml5InicisViewController.swift in Sources */,
 				6FA7C9D01EA93DD200BAA86C /* Html5InicisViewController.swift in Sources */,
 				6FA7C9BB1EA93D9D00BAA86C /* AppDelegate.swift in Sources */,
 			);

@@ -56,7 +56,7 @@ class RemoteViewController: UIViewController {
 extension RemoteViewController: UIWebViewDelegate {
     func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         // 해당 함수는 redirecURL의 결과를 직접 처리하고 할 때 사용하는 함수 (IAMPortPay.sharedInstance.configure m_redirect_url 값을 설정해야함.)
-        IAMPortPay.sharedInstance.webViewRedirectUrl(shouldStartLoadWith: request, parser: { (data, response, error) -> Any? in
+        IAMPortPay.sharedInstance.requestRedirectUrl(for: request, parser: { (data, response, error) -> Any? in
             // Background Thread
             var resultData: [String: Any]?
             if let httpResponse = response as? HTTPURLResponse {
@@ -76,7 +76,7 @@ extension RemoteViewController: UIWebViewDelegate {
             // Main Thread
         }
         
-        return IAMPortPay.sharedInstance.webView(webView, shouldStartLoadWith: request, navigationType: navigationType)
+        return IAMPortPay.sharedInstance.requestAction(for: request)
     }
     
     func webViewDidFinishLoad(_ webView: UIWebView) {

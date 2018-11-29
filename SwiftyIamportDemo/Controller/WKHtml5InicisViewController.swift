@@ -1,28 +1,29 @@
 //
-//  Html5InicisViewController.swift
-//  SwiftIamport
+//  WKHtml5InicisViewController.swift
+//  SwiftyIamportDemo
 //
-//  Created by JosephNK on 2017. 4. 21..
-//  Copyright © 2017년 JosephNK. All rights reserved.
+//  Created by JosephNK on 29/11/2018.
+//  Copyright © 2018 JosephNK. All rights reserved.
 //
 
 import UIKit
 import SwiftyIamport
+import WebKit
 
-class Html5InicisViewController: UIViewController {
+class WKHtml5InicisViewController: UIViewController {
 
-    lazy var webView: UIWebView = {
-        var view = UIWebView()
+    lazy var wkWebView: WKWebView = {
+        var view = WKWebView()
         view.backgroundColor = UIColor.clear
-        view.delegate = self
+        view.navigationDelegate = self
         return view
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.addSubview(webView)
-        self.webView.frame = self.view.bounds
+        self.view.addSubview(wkWebView)
+        self.wkWebView.frame = self.view.bounds
         
         // 결제 환경 설정
         IAMPortPay.sharedInstance.configure(scheme: "iamporttest",              // info.plist에 설정한 scheme
@@ -32,7 +33,7 @@ class Html5InicisViewController: UIViewController {
             .setPGType(.html5_inicis)               // PG사 타입
             .setIdName(nil)                         // 상점아이디 ({PG사명}.{상점아이디}으로 생성시 사용)
             .setPayMethod(.card)                    // 결제 형식
-            .setWebView(self.webView)               // 현재 Controller에 있는 WebView 지정
+            .setWKWebView(self.wkWebView)           // 현재 Controller에 있는 WebView 지정
             .setRedirectUrl(nil)                    // m_redirect_url 주소
         
         // 결제 정보 데이타
@@ -53,21 +54,19 @@ class Html5InicisViewController: UIViewController {
         // 결제 웹페이지(Local) 파일 호출
         if let url = IAMPortPay.sharedInstance.urlFromLocalHtmlFile() {
             let request = URLRequest(url: url)
-            self.webView.loadRequest(request)
+            self.wkWebView.load(request)
         }
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-
 }
 
-extension Html5InicisViewController: UIWebViewDelegate {
-    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-        // 해당 함수는 redirecURL의 결과를 직접 처리하고 할 때 사용하는 함수 (IAMPortPay.sharedInstance.configure m_redirect_url 값을 설정해야함.)
+extension WKHtml5InicisViewController: WKNavigationDelegate {
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        let request = navigationAction.request
+        
         IAMPortPay.sharedInstance.requestRedirectUrl(for: request, parser: { (data, response, error) -> Any? in
-            // Background Thread
+            // Background Thread 처리
             var resultData: [String: Any]?
             if let httpResponse = response as? HTTPURLResponse {
                 let statusCode = httpResponse.statusCode
@@ -83,15 +82,17 @@ extension Html5InicisViewController: UIWebViewDelegate {
             }
             return resultData
         }) { (pasingData) in
-            // Main Thread
+            // Main Thread 처리
         }
         
-        return IAMPortPay.sharedInstance.requestAction(for: request)
+        let result = IAMPortPay.sharedInstance.requestAction(for: request)
+        decisionHandler(result ? .allow : .cancel)
     }
     
-    func webViewDidFinishLoad(_ webView: UIWebView) {
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         // 결제 환경으로 설정에 의한 웹페이지(Local) 호출 결과
-        IAMPortPay.sharedInstance.requestIAMPortPayWebViewDidFinishLoad(webView) { (error) in
+        IAMPortPay.sharedInstance.requestIAMPortPayWKWebViewDidFinishLoad(webView) { (error) in
             if error != nil {
                 switch error! {
                 case .custom(let reason):
@@ -103,4 +104,13 @@ extension Html5InicisViewController: UIWebViewDelegate {
             }
         }
     }
+    
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        print("didFail")
+    }
+    
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        print("didFailProvisionalNavigation \(error.localizedDescription)")
+    }
+    
 }
