@@ -190,7 +190,7 @@ public extension IAMPortPay {
         return self.applicationOpenUrl(url: url)
     }
     
-    public func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+    public func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         return self.applicationOpenUrl(url: url)
     }
     
@@ -207,7 +207,7 @@ public extension IAMPortPay {
     }
     
     @available(*, deprecated, message: "Use: requestAction method")
-    public func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+    public func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool {
         return self.requestAction(for: request)
     }
     

@@ -53,10 +53,10 @@ class WKNiceViewController: UIViewController {
         IAMPortPay.sharedInstance.setParameters(parameters).commit()
         
         // ISP 취소시 이벤트 (NicePay만 가능)
-        IAMPortPay.sharedInstance.setCancelListenerForNicePay { [weak self] _ in
+        IAMPortPay.sharedInstance.setCancelListenerForNicePay { [weak self]  in
             DispatchQueue.main.async {
-                let alert = UIAlertController(title: nil, message: "ISP 결제 취소", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                let alert = UIAlertController(title: nil, message: "ISP 결제 취소", preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
                 self?.present(alert, animated: true, completion: nil)
             }
         }
