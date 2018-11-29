@@ -16,7 +16,7 @@
 Cocoapods
 
 ```
-pod 'SwiftyIamport', '~> 4.0.0'
+pod 'SwiftyIamport', '~> 4.2.0'
 ```
 
 ## Setup (Info.plist)
@@ -74,6 +74,11 @@ pod 'SwiftyIamport', '~> 4.0.0'
 </dict>
 ```
 
+## Support WebView 
+
+- UIWebView
+- WKWebView
+
 ## Usage
 
 1. 공통
@@ -105,7 +110,7 @@ func application(_ application: UIApplication, open url: URL, sourceApplication:
 }
 ```
 
-2. 웹 요청하여 처리할 경우
+2. 웹 요청하여 처리할 경우 (ex., UIWebView)
 ```
 override func viewDidLoad() {
     super.viewDidLoad()
@@ -160,7 +165,7 @@ func webViewDidFinishLoad(_ webView: UIWebView) {
 
 ```
 
-3. 모듈에 내장되어 있는 HTML 파일을 이용하여 처리할 경우
+3. 모듈에 내장되어 있는 HTML 파일을 이용하여 처리할 경우 (ex., UIWebView)
 ```
 override func viewDidLoad() {
     super.viewDidLoad()
@@ -249,7 +254,8 @@ func webViewDidFinishLoad(_ webView: UIWebView) {
 
 ## More
 
-- SwiftyIamportDemo를 참고 바랍니다.
+- 자세한 사용법은 SwiftyIamportDemo를 참고 바랍니다.
+- WKWebView 관련 해서 Demo를 참고 바랍니다.
 
 ## Requirements
 
