@@ -25,6 +25,8 @@ public enum IAMPortPGType: String {
     case payco          = "payco"         // (페이코)
     case paypal         = "paypal"        // (페이팔)
     case eximbay        = "eximbay"       // (엑심베이)
+    case naverpay       = "naverpay"      // (네이버페이)
+    case naverco        = "naverco"       // (네이버페이-주문형)
     case kcp            = "kcp"           // (NHN KCP)
     case kcp_billing    = "kcp_billing"   // (NHN KCP)
     case kicc           = "kicc"          // (KICC)
