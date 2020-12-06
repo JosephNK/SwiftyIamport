@@ -17,7 +17,7 @@ public enum IAMPortPGType: String {
     case uplus          = "uplus"         // (LGU+)
     case nice           = "nice"          // (나이스페이)
     case jtnet          = "jtnet"         // (JTNet)
-    case kakao          = "kakao"         // (카카오페이)
+    case kakao          = "kakaopay"      // (카카오페이)
     case danal          = "danal"         // (다날휴대폰소액결제)
     case danal_tpay     = "danal_tpay"    // (다날일반결제)
     case mobilians      = "mobilians"     // (모빌리언스 휴대폰소액결제)
@@ -25,6 +25,15 @@ public enum IAMPortPGType: String {
     case payco          = "payco"         // (페이코)
     case paypal         = "paypal"        // (페이팔)
     case eximbay        = "eximbay"       // (엑심베이)
+    case naverpay       = "naverpay"      // (네이버페이)
+    case naverco        = "naverco"       // (네이버페이-주문형)
+    case kcp            = "kcp"           // (NHN KCP)
+    case kcp_billing    = "kcp_billing"   // (NHN KCP)
+    case kicc           = "kicc"          // (KICC)
+    case bluewalnut     = "bluewalnut"    // (블루월넛)
+    case chai           = "chai"          // (차이 간편결제)
+    case smilepay       = "smilepay"      // (스마일페이)
+    case alipay         = "alipay"        // (알리페이)
 }
 
 public enum IAMPortPayMethod: String {
