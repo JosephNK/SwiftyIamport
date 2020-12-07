@@ -62,6 +62,10 @@ pod 'SwiftyIamport', '~> 4.2.1'
   <string>citimobileapp</string>
   <string>kakaotalk</string>
   <string>payco</string>
+  <string>smilepayapp</string>
+  <string>chai</string>
+  <string>alipay</string>
+  <string>alipayshare</string>
 </array>
 ```
 
@@ -83,11 +87,11 @@ pod 'SwiftyIamport', '~> 4.2.1'
 
 1. 공통
 
-```
+```Swift
 import SwiftyIamport
 ```
 
-```
+```Swift
 - AppDelegate 파일 설정
 
 func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
@@ -111,7 +115,7 @@ func application(_ application: UIApplication, open url: URL, sourceApplication:
 ```
 
 2. 웹 요청하여 처리할 경우 (ex., UIWebView)
-```
+```Swift
 override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -166,7 +170,7 @@ func webViewDidFinishLoad(_ webView: UIWebView) {
 ```
 
 3. 모듈에 내장되어 있는 HTML 파일을 이용하여 처리할 경우 (ex., UIWebView)
-```
+```Swift
 override func viewDidLoad() {
     super.viewDidLoad()
 
