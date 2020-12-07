@@ -92,7 +92,7 @@ import SwiftyIamport
 ```
 
 ```Swift
-- AppDelegate 파일 설정
+// - AppDelegate 파일 설정
 
 func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
     if let scheme = url.scheme {
