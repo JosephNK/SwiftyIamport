@@ -260,6 +260,7 @@ func webViewDidFinishLoad(_ webView: UIWebView) {
 
 - 자세한 사용법은 SwiftyIamportDemo를 참고 바랍니다.
 - WKWebView 관련 해서 Demo를 참고 바랍니다.
+- SwiftUI 관련 해서 [Demo를 참고](/SwiftyIamportDemo/SwiftUI/IAMPortWebView.swift) 바랍니다.
 
 ## Requirements
 
