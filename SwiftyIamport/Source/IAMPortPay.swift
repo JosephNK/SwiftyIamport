@@ -195,11 +195,11 @@ public class IAMPortPay {
 // MARK: - Application Helper
 public extension IAMPortPay {
     // for iOS below 9.0
-    public func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
         return self.applicationOpenUrl(url: url)
     }
     
-    public func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         return self.applicationOpenUrl(url: url)
     }
     
@@ -211,16 +211,16 @@ public extension IAMPortPay {
 // MARK: - WebView Delegate Helper
 public extension IAMPortPay {
     @available(*, deprecated, message: "Use: requestRedirectUrl method")
-    public func webViewRedirectUrl(shouldStartLoadWith request: URLRequest, parser: @escaping (_ data: Data?, _ response: URLResponse?, _ error: Error?) -> Any?, completion: @escaping (_ pasingData: Any?) -> Void) {
+    func webViewRedirectUrl(shouldStartLoadWith request: URLRequest, parser: @escaping (_ data: Data?, _ response: URLResponse?, _ error: Error?) -> Any?, completion: @escaping (_ pasingData: Any?) -> Void) {
         self.requestRedirectUrl(for: request, parser: parser, completion: completion)
     }
     
     @available(*, deprecated, message: "Use: requestAction method")
-    public func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool {
+    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool {
         return self.requestAction(for: request)
     }
     
-    public func requestRedirectUrl(for request: URLRequest, parser: @escaping (_ data: Data?, _ response: URLResponse?, _ error: Error?) -> Any?, completion: @escaping (_ pasingData: Any?) -> Void) {
+    func requestRedirectUrl(for request: URLRequest, parser: @escaping (_ data: Data?, _ response: URLResponse?, _ error: Error?) -> Any?, completion: @escaping (_ pasingData: Any?) -> Void) {
         let urlString = request.url?.absoluteString ?? ""
         if let redirect_url = self.m_redirect_url {
             if urlString.hasPrefix(redirect_url) {
@@ -235,7 +235,7 @@ public extension IAMPortPay {
         }
     }
     
-    public func requestAction(for request: URLRequest) -> Bool {
+    func requestAction(for request: URLRequest) -> Bool {
         guard let url = request.url else {
             return false
         }
@@ -274,7 +274,7 @@ public extension IAMPortPay {
         return self.webViewRequestWithForNicePay(request: request)
     }
     
-    public func requestIAMPortPayWebViewDidFinishLoad(_ webView: UIWebView, completion: @escaping (_ error: IAMPortPayError?) -> Void) {
+    func requestIAMPortPayWebViewDidFinishLoad(_ webView: UIWebView, completion: @escaping (_ error: IAMPortPayError?) -> Void) {
         if webView.stringByEvaluatingJavaScript(from: "document.readyState") == "complete" {
             let url = webView.request?.url
             
@@ -306,7 +306,7 @@ public extension IAMPortPay {
         }
     }
     
-    public func requestIAMPortPayWKWebViewDidFinishLoad(_ wkWebView: WKWebView, completion: @escaping (_ error: IAMPortPayError?) -> Void) {
+    func requestIAMPortPayWKWebViewDidFinishLoad(_ wkWebView: WKWebView, completion: @escaping (_ error: IAMPortPayError?) -> Void) {
         wkWebView.evaluateJavaScript("document.readyState == \"complete\"") { (any, error) in
             let url = wkWebView.url
             
@@ -347,7 +347,7 @@ public extension IAMPortPay {
         }
     }
     
-    public func setCancelListenerForNicePay(_ handler: (() -> Void)?) {
+    func setCancelListenerForNicePay(_ handler: (() -> Void)?) {
         self.addCancelHandler = handler
     }
     
@@ -355,7 +355,7 @@ public extension IAMPortPay {
 
 fileprivate extension IAMPortPay {
     
-    fileprivate func makeParameters(for url: URL?) -> (param: IAMPortParameters?, error: IAMPortPayError?) {
+    func makeParameters(for url: URL?) -> (param: IAMPortParameters?, error: IAMPortPayError?) {
         if let currentURL = url?.absoluteString {
             #if DEBUG
             print("### WebView currentURL: \(currentURL)")
@@ -412,7 +412,7 @@ fileprivate extension IAMPortPay {
         return (nil, IAMPortPayError.parametersNone)
     }
     
-    fileprivate func isNotSupportValidation(_ pgType: IAMPortPGType?, _ parameters: IAMPortParameters) -> Bool {
+    func isNotSupportValidation(_ pgType: IAMPortPGType?, _ parameters: IAMPortParameters) -> Bool {
         if let pg = pgType, let pm = parameters["pay_method"] as? IAMPortPayMethod {
             var isNotSupport = false
             switch pg {
@@ -471,7 +471,7 @@ fileprivate extension IAMPortPay {
         return false
     }
     
-    fileprivate func applicationOpenUrlForNicePay(url: URL) -> Bool {
+    func applicationOpenUrlForNicePay(url: URL) -> Bool {
         var redirectURL = url.absoluteString
         
         #if DEBUG
@@ -530,7 +530,7 @@ fileprivate extension IAMPortPay {
         return true
     }
     
-    fileprivate func webViewRequestWithForNicePay(request: URLRequest) -> Bool {
+    func webViewRequestWithForNicePay(request: URLRequest) -> Bool {
         let url = request.url
         let urlString = url?.absoluteString ?? ""
         
@@ -574,7 +574,7 @@ fileprivate extension IAMPortPay {
         return true
     }
     
-    fileprivate func requestBankPayResultForNicePay(_ webView: UIWebView?, urlString: String?, bodyString: String?) {
+    func requestBankPayResultForNicePay(_ webView: UIWebView?, urlString: String?, bodyString: String?) {
         guard let webView = webView, let urlString = urlString, let bodyString = bodyString else {
             return
         }
@@ -591,7 +591,7 @@ fileprivate extension IAMPortPay {
         }
     }
     
-    fileprivate func requestISPPayResultForNicePay(_ webView: UIWebView?, urlString: String?) {
+    func requestISPPayResultForNicePay(_ webView: UIWebView?, urlString: String?) {
         guard let webView = webView, let urlString = urlString else {
             return
         }
